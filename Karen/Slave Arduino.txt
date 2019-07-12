@@ -1,0 +1,18 @@
+#include <SoftwareSerial.h>
+SoftwareSerial EEBlue(10, 11); // RX | TX
+volatile unsigned char data = 0;
+void setup() {
+  // Serial.begin(9600);
+
+    DDRD = 0xFF;
+   EEBlue.begin(115200);
+}
+
+void loop() {
+    if (EEBlue.available() > 0)
+   {
+       data = EEBlue.read();
+       PORTD = data;
+      //Serial.println(data);
+    }
+}

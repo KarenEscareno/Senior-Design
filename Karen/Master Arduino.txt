@@ -1,0 +1,32 @@
+#include <SoftwareSerial.h>
+SoftwareSerial EEBlue(10, 11); // RX | TX
+
+unsigned char incomingAudio = 0;
+
+void setup(){
+  //Serial.begin(115200);
+  cli();
+  TCCR0A = 0;// set entire TCCR1A register to 0
+    TCCR0B = 0;// same for TCCR1B
+    TCNT0  = 0;//initialize counter value to 0
+    OCR0A = 249;
+    // turn on CTC mode
+    TCCR0A |= (1 << WGM01);
+    // Set CS11 bit for 8 prescaler.
+    TCCR0B |= (1 << CS11);  
+    // enable timer compare interrupt
+    TIMSK0 |= (1 << OCIE0A);
+    sei();
+  EEBlue.begin(115200);  //Baud Rate for command Mode. 
+}
+ 
+void loop(){
+
+   }
+   
+ISR(TIMER0_COMPA_vect)
+{
+  incomingAudio = (analogRead(A0));//read voltage at A0
+    EEBlue.write(incomingAudio>>2);
+  //insert your code here that you want to run every time the counter reaches OCR1A
+}

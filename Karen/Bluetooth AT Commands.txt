@@ -1,0 +1,34 @@
+#include <SoftwareSerial.h>
+SoftwareSerial EEBlue(10, 11); // RX | TX
+// Connect the HC-05 TX to Arduino pin 2 RX. 
+// Connect the HC-05 RX to Arduino pin 3 TX through a voltage divider.
+ 
+ 
+void setup() 
+{
+    // start th serial communication with the host computer
+    Serial.begin(9600);
+    //Serial.println("Arduino with HC-05 is ready");
+ 
+    // start communication with the HC-05 using 38400
+    EEBlue.begin(38400);  
+    //Serial.println("BTserial started at 38400");
+}
+ 
+void loop()
+{
+ 
+     // Keep reading from HC-05 and send to Arduino Serial Monitor
+    if (EEBlue.available())
+    {  
+        Serial.write(EEBlue.read());
+    }
+ 
+    // Keep reading from Arduino Serial Monitor and send to HC-05
+    if (Serial.available())
+    {
+        EEBlue.write(Serial.read());
+  
+    }
+ 
+}
